@@ -1,6 +1,7 @@
 package com.AddressBookSystem;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -11,6 +12,19 @@ public class AddressBookServiceMain {
 	public static void main(String[] args) throws SQLException {
 		AddressBookServiceMain services = new AddressBookServiceMain();
 		services.readAddressBookData();
+		services.updateAddressBookData("RAO", "12111");
+		services.readAddressBookData();
+	}
+
+	private void updateAddressBookData(String name, String phoneNumber) throws SQLException {
+		Connection conn = MySQLConnection.getConnection();
+		PreparedStatement statement = conn.prepareStatement("UPDATE addressbookservice.addressbook SET phoneNumber = ? WHERE firstName = ?");
+		statement.setString(1, phoneNumber);
+		statement.setString(2, name);
+		statement.executeUpdate();
+        System.out.println("data updated successfully");
+        
+        conn.close();
 	}
 
 	private void readAddressBookData() throws SQLException {
